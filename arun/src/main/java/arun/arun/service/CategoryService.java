@@ -7,6 +7,8 @@ import arun.arun.repository.CategoryRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 
 @Service
 @AllArgsConstructor
@@ -16,7 +18,7 @@ public class CategoryService {
 
 //    create category
     public CategoryDTO createCategory(CategoryDTO categoryDTO){
-        Category category=CategoryMApper.toCategory(categoryDTO);
+        Category category=CategoryMApper.toCategoryEntity(categoryDTO);
       category=  categoryRepository.save(category);
       return  CategoryMApper.toCategoryDTO(category);
 
@@ -24,8 +26,20 @@ public class CategoryService {
     }
 //    get all category
 
+    public List<CategoryDTO> getAllCategories(){
+        return categoryRepository.findAll().stream().map(CategoryMApper::toCategoryDTO).toList();
+    }
+
 //    get category by id
+    public CategoryDTO getCategoryById(Long Id){
+       Category category= categoryRepository.findById(Id).orElseThrow(()->new RuntimeException("Category not found"));
+       return CategoryMApper.toCategoryDTO(category);
+    }
 
 //    delete category
+    public String deleteCategory(Long id){
+        categoryRepository.deleteById(id);
+        return "Category"+ id + "has been  deleted";
+    }
 
 }

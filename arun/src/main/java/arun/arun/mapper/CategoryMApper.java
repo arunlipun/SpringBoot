@@ -14,7 +14,7 @@ public class CategoryMApper {
        categoryDTO.setProducts(category.getProducts().stream().map(ProductMapper::toProductDTO).toList());
        return categoryDTO;
     }
-    public static Category toCategory(CategoryDTO categoryDTO){
+    public static Category toCategoryEntity(CategoryDTO categoryDTO){
         Category category=new Category();
         category.setName(categoryDTO.getName());
         return category;
