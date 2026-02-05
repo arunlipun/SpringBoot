@@ -3,6 +3,7 @@ package arun.arun.service;
 import arun.arun.dto.ProductDTO;
 import arun.arun.entity.Category;
 import arun.arun.entity.Product;
+import arun.arun.exception.CategoryNotFoundException;
 import arun.arun.mapper.ProductMapper;
 import arun.arun.repository.CategoryRepository;
 import arun.arun.repository.ProductRepository;
@@ -24,7 +25,7 @@ public class ProductService {
             throw new RuntimeException("Category ID must not be null");
         }
 
-        Category category=categoryRepository.findById(productDTO.getCategoryId()).orElseThrow(()-> new RuntimeException("Category Not found"));
+        Category category=categoryRepository.findById(productDTO.getCategoryId()).orElseThrow(()-> new CategoryNotFoundException("Category"+ productDTO.getCategoryId()+ " Not found"));
         Product product = ProductMapper.toProductEntity(productDTO,category);
         product=productRepository.save(product);
         return ProductMapper.toProductDTO(product);

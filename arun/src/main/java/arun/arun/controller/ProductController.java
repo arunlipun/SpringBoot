@@ -5,6 +5,7 @@ import arun.arun.service.ProductService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,12 +21,14 @@ public class ProductController {
         return productService.getAllProducts();
     }
 //    createProduct
+@PreAuthorize("hasAuthority('ROLE_SELLER')")
     @PostMapping
     public ResponseEntity<ProductDTO >cerateProduct(@RequestBody ProductDTO productDTO) {
       ProductDTO createdProduct=  productService.cerateProduct(productDTO);
       return new ResponseEntity<>(createdProduct, HttpStatus.CREATED);
     }
 //    update product
+@PreAuthorize("hasAuthority('ROLE_SELLER')")
     @PutMapping("/{id}")
     public ProductDTO updateProduct(@PathVariable Long id, @RequestBody ProductDTO productDTO) {
         return productService.updateProduct(id, productDTO);
@@ -38,6 +41,7 @@ public class ProductController {
         return new ResponseEntity<>(productDTO, HttpStatus.OK);
     }
  //delete
+ @PreAuthorize("hasAuthority('ROLE_SELLER')")
     @DeleteMapping("/{id}")
  public String  deleteProduct(@PathVariable Long id){
        return productService.deleteProduct(id);

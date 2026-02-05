@@ -2,12 +2,14 @@ package arun.arun.service;
 
 import arun.arun.dto.CategoryDTO;
 import arun.arun.entity.Category;
+import arun.arun.exception.CategoryAlreadyExistsException;
 import arun.arun.mapper.CategoryMApper;
 import arun.arun.repository.CategoryRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 
 @Service
@@ -18,6 +20,10 @@ public class CategoryService {
 
 //    create category
     public CategoryDTO createCategory(CategoryDTO categoryDTO){
+    Optional<Category> categoryOptional=    categoryRepository.findByName(categoryDTO.getName());
+    if(categoryOptional.isPresent()){
+        throw new CategoryAlreadyExistsException("Category "+  categoryDTO.getName() + "already exists");
+    }
         Category category=CategoryMApper.toCategoryEntity(categoryDTO);
       category=  categoryRepository.save(category);
       return  CategoryMApper.toCategoryDTO(category);
